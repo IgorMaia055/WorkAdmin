@@ -1,0 +1,59 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    .states{
+      border: 0;
+      background-color: rgba(240, 248, 255, 0);
+    }
+    a{
+      text-decoration: none;
+    }
+  </style>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Comprovantes de pagamentos</h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+          <a href="{{ url('comprovante/criar') }}" type="button" class="btn btn-sm btn-outline-secondary">+ Novo comprovante</a>
+        </div>
+  
+        <form data-url-busca="{{ url('buscar') }}" class="d-flex" role="search">
+          <div class="input-group mb-0">
+            <input type="text" id="busca" name="busca" class="form-control" type="search" placeholder="Search" aria-label="Search">
+          </div>
+        </form>
+  
+      </div>
+  </div>
+
+  <div class="card-group">
+    <div class="card">
+        <img src="blob:https://web.whatsapp.com/b29d93d3-44d1-42ee-8d1a-14ceb4cb1cf7" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Cliente</h5>
+          <p class="card-text">Pagamento referente ao veículo taltal com o ano taltal e placa taltal.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+    
+  </div>
+  </div>
+
+
+  {% endblock %}

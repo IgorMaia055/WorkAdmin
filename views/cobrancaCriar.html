@@ -1,0 +1,259 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <div class="style">
+    <style>
+        #image{
+            height: 52rem;
+            width: 40rem;
+            border: 1px solid black;
+            position: relative;
+            left: 35%;
+        }
+        #image img{
+            height: 100%;
+            width: 100%;
+        }
+        .absolute{
+            position: absolute;
+        }
+        .titulo{
+            top: 30%;
+            left: 3%;
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .inputCobranca{
+            position: absolute;
+            border: 0;
+            background-color: rgb(252, 252, 252);
+            border-bottom: 2px solid rgb(89, 89, 89);
+            width: 75%;
+            letter-spacing: 3px;
+            font-size: 1rem;
+            left: 18%;
+        }
+        .long{
+            width: 88%;
+        }
+        .label{
+            position: absolute;
+            font-size: 1rem;
+            font-weight: 500;
+            left: 5%;
+        }
+
+        .labelDevedor{
+            top: 22rem;
+             
+        }
+        #devedor{
+            top: 22rem;
+        }
+
+        .labelEndereco{
+            top: 26rem;
+        }
+        #endereco{
+            top: 26rem;
+        }
+
+        .labelTel{
+            top: 30rem;
+        }
+        #tel{
+            top: 30rem;
+        }
+
+        .labelServico{
+            top: 34rem;
+        }
+        #servico{
+            top: 34rem;
+            font-size: 0.9rem;
+            letter-spacing: 0;
+        }
+        #servico2{
+            top: 37rem;
+            left: 5%;
+            font-size: 0.9rem;
+            letter-spacing: 0;
+        }
+
+        .labelCobranca{
+            top: 41rem;
+        }
+        #cobranca{
+            top: 43rem;
+            left: 5%;
+            width: 40%;
+            border-bottom: 0;
+            letter-spacing: 0;
+            border: 1px solid rgb(150, 150, 150);
+        }
+        
+        .labelTotal{
+            top: 41rem;
+            left: 55%;
+        }
+        #total{
+            top: 43rem;
+            left: 55%;
+            width: 40%;
+            border-bottom: 0;
+            letter-spacing: 0;
+            border: 1px solid rgb(150, 150, 150); 
+        }
+
+        .ass{
+            position: absolute;
+            bottom: 1rem;
+            height: 3rem;
+            width: 16rem;
+            left: 2rem;
+        }
+        
+        .ass img{
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+  </div>
+
+  <div class="py-5 text-center">
+    <h2 id="title">Nova cobrança</h2>
+
+    <div id="del" hidden>
+      <a class="btn btn-outline-danger" id="btnDel">Deletar cobrança</a>
+    </div>
+  </div>
+
+      <form action="{{ url('cobranca/create') }}" method="get">
+
+        <div class="row g-3 ">
+            <div class="my-2 col-6">
+              <div id="image">
+                <img src="../site/img/cobranca(auto pintura maia).png" alt="">
+
+                <p class="absolute titulo">Documento para registrar e realizar uma cobrança para o cliente devedor</p>
+
+                <label class="label labelDevedor" for="devedor">Devedor:</label>
+                <input type="text" name="devedor" id="devedor" class="inputCobranca">
+
+                <label class="label labelEndereco" for="endereco">Endereço:</label>
+                <input type="text" name="endereco" id="endereco" class="inputCobranca">
+
+                <label class="label labelTel" for="tel">Telefone:</label>
+                <input type="text" name="tel" id="tel" class="inputCobranca">
+
+                <label class="label labelServico" for="servico">Serviço:</label>
+                <input name="servico" id="servico" class="inputCobranca">
+                <input name="servico2" id="servico2" class="inputCobranca long">
+
+                <label class="label labelCobranca" for="cobranca">Valor a pagar:</label>
+                <div class="input-group mb-3 inputCobranca" id="cobranca">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                    <input type="text" class="form-control" name="cobranca" id="inputCobranca">
+                </div>
+
+                <label class="label labelTotal" for="total">Valor pago:</label>
+                <div class="input-group mb-3 inputCobranca" id="total">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                    <input type="text" class="form-control" name="total" id="inputValor">
+                </div>
+
+                <div class="ass">
+                    <img src="../site/img/ass.png" alt="">
+                </div>
+              </div>
+            </div>
+        </div>
+
+        {% if dados != false %}
+        {% for cobranca in cobrancas %}
+
+        <script>
+            document.getElementById('title').innerHTML = "Editar Cobrança"
+            document.getElementById('del').hidden = false
+            document.getElementById('btnDel').href = "{{ url('cobranca/deletar/'~cobranca.id) }}"
+            document.getElementById('devedor').value = '{{ cobranca.cliente }}'
+            document.getElementById('endereco').value = '{{ cobranca.endereco }}'
+            document.getElementById('tel').value = '{{ cobranca.tel }}'
+            
+            let servico = '{{ cobranca.servico }}'.split("_")
+
+            document.getElementById('servico').value = servico[0]
+            if(servico[1]){
+                document.getElementById('servico2').value = servico[1]
+            }
+
+            document.getElementById('inputCobranca').value = '{{ cobranca.valorCobranca }}'
+            document.getElementById('inputValor').value = '{{ cobranca.valor }}'
+
+        </script>
+       
+        {% endfor %}
+        {% endif %}
+
+        <hr class="my-4">
+
+        <div class="w-100 btn btn-outline-success btn-lg" onclick="image()"  data-bs-toggle="modal" data-bs-target="#exampleModal"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-filetype-png" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5Zm-3.76 8.132c.076.153.123.317.14.492h-.776a.797.797 0 0 0-.097-.249.689.689 0 0 0-.17-.19.707.707 0 0 0-.237-.126.96.96 0 0 0-.299-.044c-.285 0-.506.1-.665.302-.156.201-.234.484-.234.85v.498c0 .234.032.439.097.615a.881.881 0 0 0 .304.413.87.87 0 0 0 .519.146.967.967 0 0 0 .457-.096.67.67 0 0 0 .272-.264c.06-.11.091-.23.091-.363v-.255H8.82v-.59h1.576v.798c0 .193-.032.377-.097.55a1.29 1.29 0 0 1-.293.458 1.37 1.37 0 0 1-.495.313c-.197.074-.43.111-.697.111a1.98 1.98 0 0 1-.753-.132 1.447 1.447 0 0 1-.533-.377 1.58 1.58 0 0 1-.32-.58 2.482 2.482 0 0 1-.105-.745v-.506c0-.362.067-.678.2-.95.134-.271.328-.482.582-.633.256-.152.565-.228.926-.228.238 0 .45.033.636.1.187.066.348.158.48.275.133.117.238.253.314.407Zm-8.64-.706H0v4h.791v-1.343h.803c.287 0 .531-.057.732-.172.203-.118.358-.276.463-.475a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.475-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.381.574.574 0 0 1-.238.24.794.794 0 0 1-.375.082H.788v-1.406h.66c.218 0 .389.06.512.182.123.12.185.295.185.521Zm1.964 2.666V13.25h.032l1.761 2.675h.656v-3.999h-.75v2.66h-.032l-1.752-2.66h-.662v4h.747Z"/>
+        </svg> Gerar imagem</div>
+<br><br>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Criar cobrança</button>
+      </form>
+<br><br>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 135%;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Imagem realizada!</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="localImg">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <a id="btnImage" href="" download="" class="btn btn-primary">Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    
+  function image(){
+    $(document).ready(function() {
+
+              html2canvas(document.querySelector("#image")).then(canvas => {
+                console.log(canvas)
+                $('#localImg').append(canvas)
+
+              var imgageData = canvas.toDataURL("image/png");
+            
+              var newData = imgageData.replace(
+              /^data:image\/png/, "data:application/octet-stream");
+            
+              let nomeCliente = document.querySelector('#devedor')
+
+              $("#btnImage").attr(
+                "download", "cobrança - ("+ nomeCliente.value +").png").attr(
+                "href", newData);
+              });
+
+          
+      });
+
+
+  }
+</script>
+
+
+  {% endblock %}

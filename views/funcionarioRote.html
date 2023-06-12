@@ -1,0 +1,502 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    #deleteGasto{
+      padding-left: 3rem;
+      color: rgba(0, 0, 0, 0.414);
+    }
+    #deleteGasto:hover{
+      color: rgba(198, 18, 18, 0.792);
+    }
+    .modal-dialog-scrollable {
+    height: 20rem;
+}
+.hrefStyle{
+  color: rgba(255, 4, 4, 0.494);
+  width: 3rem;
+}
+.hrefStyle:hover{
+  color: rgba(255, 4, 4, 0.907);
+}
+
+  </style>
+  <script>
+    let totalPagarFuncionario = 0;
+  </script>
+
+  {% for funcionario in funcionarioDados %}
+  
+  <main class="container">
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <p class="pb-3 mb-0 small lh-sm border-bottom">
+    <h1 class="h4">{{ funcionario.primeiro_nome }} {{ funcionario.segundo_nome }}
+      <span style="font-size: 13px;">{{ funcionario.apelido }}</span>
+    </h1>
+    
+
+        <strong class="d-block text-gray-dark">Sálario: {{ funcionario.salario }}</strong>
+      {{ contarTempo(funcionario.data_trabalho) }} cadastrado
+
+       <p><strong>
+        {{ funcionario.funcao }} em 
+        {% if funcionario.tempotrabalho == tempointegral  %}
+        Meio período
+        {% else %}
+        Tempo integral
+        {% endif %}
+       </strong></p>
+       
+        <h7 id="Tgasto" style="color: rgb(138, 11, 11);">Total gasto: R$ </h7>
+
+        <!-- Default dropstart button -->
+<div class="btn-group dropstart">
+  <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+      <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+    </svg>
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+      <div class="input-group mb-3">
+        <input type="password"  class="form-control" id="passProfile" value="{{ funcionario.senha }}" disabled>
+        <span class="input-group-text" id="verPass">👁</span>
+      </div>
+    </li>
+    <li><a class="dropdown-item" href="{{ url('delete/funcionario/'~funcionario.id) }}">Apagar</a></li>
+  </ul>
+</div>
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <a href="tel:+55 {{ funcionario.tel }}" class="btn btn-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-plus-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM12.5 1a.5.5 0 0 1 .5.5V3h1.5a.5.5 0 0 1 0 1H13v1.5a.5.5 0 0 1-1 0V4h-1.5a.5.5 0 0 1 0-1H12V1.5a.5.5 0 0 1 .5-.5z"/>
+          </svg>
+          {{ funcionario.telefone }}</a>
+
+        <a href="mailto:{{ funcionario.email }}" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-at-fill" viewBox="0 0 16 16">
+          <path d="M2 2A2 2 0 0 0 .05 3.555L8 8.414l7.95-4.859A2 2 0 0 0 14 2H2Zm-2 9.8V4.698l5.803 3.546L0 11.801Zm6.761-2.97-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 9.671V4.697l-5.803 3.546.338.208A4.482 4.482 0 0 1 12.5 8c1.414 0 2.675.652 3.5 1.671Z"/>
+          <path d="M15.834 12.244c0 1.168-.577 2.025-1.587 2.025-.503 0-1.002-.228-1.12-.648h-.043c-.118.416-.543.643-1.015.643-.77 0-1.259-.542-1.259-1.434v-.529c0-.844.481-1.4 1.26-1.4.585 0 .87.333.953.63h.03v-.568h.905v2.19c0 .272.18.42.411.42.315 0 .639-.415.639-1.39v-.118c0-1.277-.95-2.326-2.484-2.326h-.04c-1.582 0-2.64 1.067-2.64 2.724v.157c0 1.867 1.237 2.654 2.57 2.654h.045c.507 0 .935-.07 1.18-.18v.731c-.219.1-.643.175-1.237.175h-.044C10.438 16 9 14.82 9 12.646v-.214C9 10.36 10.421 9 12.485 9h.035c2.12 0 3.314 1.43 3.314 3.034v.21Zm-4.04.21v.227c0 .586.227.8.581.8.31 0 .564-.17.564-.743v-.367c0-.516-.275-.708-.572-.708-.346 0-.573.245-.573.791Z"/>
+        </svg> {{ funcionario.email }}</a>
+
+        <a id="enderecoLink" href="" target="_blank" class="btn btn-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16">
+          <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484-.08.08-.162.158-.242.234-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z"/>
+        </svg> <span id="local">{{ funcionario.endereco }}</span></a>
+      </div>
+    </div>
+    <hr>
+    <br>
+
+    <div class="row">
+      <div class="col-md-9">
+
+        <div class="modal position-static d-block">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content rounded-2">
+              <div class="modal-header border-bottom-0">
+                <div class="row">
+                  <div class="col-6">
+                    <h1 class="modal-title fs-5">Toda produção</h1>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-group mb-3">
+
+                      <input type="text" id="date_search" class="form-control">
+
+                      <div class="input-group-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>
+                    </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-body py-0" id="dadosBatePonto">
+                {% for batePoint in batePonto %}
+                {% if batePoint.states == 0 %}
+                <script>
+                  totalPagarFuncionario += Number("{{ batePoint.valor }}".replace('.', '').replace(',', '.'))
+                </script>
+                {% endif %}
+                {% endfor %}
+
+                {% for batePoint in batePonto %}
+
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ batePoint.id }}" aria-expanded="false" aria-controls="collapseExample">
+                      {{ batePoint.data_trabalho }}
+                    </button>
+                  </div>
+                  <div class="collapse" id="collapseExample{{ batePoint.id }}">
+                    <div class="card card-body">
+                      <p>
+                        Turno: <span style="color: rgb(12, 155, 12);">{{ batePoint.entrada }}</span> - <span style="color: rgb(14, 151, 14);">{{ batePoint.saida }}</span>
+                      
+                      <span style="padding-left: 7rem;">Valor: <span style="color: rgb(14, 151, 14);">R$ {{ batePoint.valor }}</span></span>
+                      
+                      </p>
+                      <p>
+                        <span style="padding-right: 10rem;">
+                          {% if batePoint.states != 0 %}
+                          <span style="color: green;" >Pagamento confirmado</span>
+                          {% else %}
+                          <span style="color: rgb(207, 201, 23);" >Pagamento pendente...</span>
+                          {% endif %}
+                        </span>
+  
+                        <a href="{{ url('deletar/batePonto/'~batePoint.id~'-'~batePoint.id_funcionario) }}" class="hrefStyle">deletar</a>
+                      </p>
+                      
+                    </div>
+                  </div>
+
+               <br>
+
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-3">
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
+    <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"/>
+    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+  </svg>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <label for="date" class="form-label">Data de trabalho</label>
+            <input type="date" class="form-control" name="date" id="date">
+          </div>
+          <div class="col">
+            <label for="entrada" class="form-label">Entrada</label>
+            <input type="time" class="form-control" name="entrada" id="entrada">
+          </div>
+          <div class="col">
+            <label for="saida" class="form-label">Saída</label>
+            <input type="time" class="form-control" name="saida" id="saida">
+          </div>
+        </div>
+
+        <input type="text" name="valor" id="valor" hidden>
+        <input type="text" name="id_funcionario" id="id_funcionario" value="{{ funcionario.id }}" hidden>
+
+      </div>
+      <div class="modal-footer">
+        <div type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</div>
+        <button type="button" class="btn btn-primary" id="salvar">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#pagamento">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+          </svg>
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="pagamento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <div class="row">
+                  <div class="col-8">
+                    <select name="opcaoPagamento" id="opcaoPagamento" class="form-control">
+                      <option value="30">Mensal</option>
+                      <option value="15" selected>Quinzena</option>
+                      <option value="7">Semanal</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-outline-dark" id="buscar">Buscar</button>
+                  </div>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="area_producao" id="area_producao" hidden>
+                
+                    <h5>Dia do pagamento: <span id="diaPagamento" class="badge bg-primary"></span></h5>
+
+                    <h5>Valor a ser pago: <span id="valorPagar" class="badge bg-danger"></span></h5>
+                  
+                </div>
+              </div>
+              <div class="modal-footer">
+                <form action="{{ url('pagar/pendencias/') }}">
+                <input type="text" name="id_funcionario" value="{{ funcionario.id }}" hidden>
+                  <input type="date" name="data" id="data" class="form-control">
+                  <br>
+                  <button class="btn btn-danger">Confirmar Pagamento</button>
+                </form>
+                </div>
+            </div>
+          </div>
+        </div>
+
+      </div> 
+    </div>
+  
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+      <section class="text-center container">
+        <div class="row py-lg-5">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" style="cursor: pointer;" id="finalizados" onclick="finalizados()">Finalizados</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="cursor: pointer;" id="pendentes" onclick="pendentes()">Pendentes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="cursor: pointer;" id="gastos" onclick="gastos()">Gastos</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      
+    
+      <div class="album py-0 bg-light">
+          <div class="container">
+              <div class="row" id="element">
+                <div id="area">
+                  
+                </div>
+  
+          </div>
+    
+    
+        </div>
+      </div>
+      <br><br>
+  </main>
+
+  <script>
+
+    $('#saida').on('change', () => {
+      let entrada = $('#entrada').val()
+      let saida = $('#saida').val()
+
+      let horario = Number(saida.replace(':', '.')) - Number(entrada.replace(':', '.'))
+      let valor = horario * Number('{{ funcionario.valor_hora }}')
+      $('#valor').val(valor.toLocaleString('pt-br', {minimumFractionDigits: 2}))
+    })
+  </script>
+  {% endfor %}
+
+  <script>
+    $(document).ready(function (){
+      $('#date_search').on('keyup', () => {
+              $.ajax({
+                  url: "{{ url('date/pesquisa') }}",
+                  method: 'POST',
+                  data: {
+                      'date': $("#date_search").val(),
+                      'id_funcionario': $("#id_funcionario").val()
+                  },
+                  success: function (data) {
+                    if(data != ''){
+                      var dataLimp = data.replace(/[']/g, '"')
+                      $("#dadosBatePonto").html(dataLimp);
+                    }
+                  }
+              })
+      })
+
+      $('#salvar').on('click', function (){
+              $.ajax({
+                  url: "{{ url('funcionario/presenca') }}",
+                  method: 'POST',
+                  data: {
+                      'date': $("#date").val(),
+                      'entrada': $("#entrada").val(),
+                      'saida': $("#saida").val(),
+                      'id_funcionario': $("#id_funcionario").val(),
+                      'valor': $("#valor").val()
+                  },
+                  success: function (data) {
+                      location.reload();
+                  }
+              })
+      })
+
+      $("#buscar").on('click', () => {
+        $.ajax({
+                  url: "{{ url('consulta/pagamento') }}",
+                  method: 'POST',
+                  data: {
+                      'id_funcionario': $("#id_funcionario").val(),
+                      'opcaoPagamento': $("#opcaoPagamento").val()
+                  },
+                  success: function (data) {
+                    console.log(data)
+                    document.getElementById('area_producao').hidden = false
+                    $("#diaPagamento").html(data)
+                    $("#valorPagar").html('R$ ' + totalPagarFuncionario.toLocaleString('pt-br', {minimumFractionDigits: 2}))
+                      // $("#area_producao").html(data.replace(/[']/g, '"'))
+                  }
+              })
+      })
+
+    })
+
+    let endereco = document.getElementById('enderecoLink')
+    
+    endereco.href = 'https://www.google.com/maps/place/'+ document.getElementById('local').innerHTML
+
+    finalizados()
+    function finalizados(){
+      document.getElementById('finalizados').classList = 'nav-link active'
+      document.getElementById('pendentes').classList = 'nav-link'
+      document.getElementById('gastos').classList = 'nav-link '
+      document.getElementById('area').innerHTML = '{% if servicos != false %}'+
+      '{% for servico in servicos %}'+
+              '<div class="col">'+
+                '<div class="card shadow-sm">'+
+                  '<div class="card-body">'+
+                    '<h6 class="card-text" id="serviceTxt">'+
+                      '{{servico.servico}}'+
+                    '</h6>'+
+                    '<p class="card-text" id="serviceTxt">'+
+                      '{{servico.detalhe}}'+
+                '</p> '+
+                '<div class="d-flex justify-content-between align-items-center">'+
+                  '<div class="btn-group">'+
+                      '<a href="{{ url("servico/"~servico.id_orcamento~"-"~servico.id_funcionario) }}" class="btn btn-sm btn-outline-secondary">Ver</a>'+
+                  '</div>'+
+                  
+                  '<small class="text-muted">'+
+                    '{% if servico.dateF != "" %}'+
+                    '<small class="text-muted">'+
+                      'Tempo de serviço: {{ diferencaTempoService(servico.dateF, servico.data) }}'+
+                    '</small>'+
+                    '<br>'+
+                     'Finalizado {{ contarTempo(servico.dateF) }}'+
+                     '{% else %}'+
+                     'Sem data de finalização'+
+                     '{% endif %}'+
+                    '</small>'+
+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+          '{% endfor %}'+
+          '{% else %}'+
+          '<p>Nenhum serviço finalizado</p>'+
+          '{% endif %}'
+    }
+
+    
+    function pendentes(){
+      document.getElementById('finalizados').classList = 'nav-link'
+      document.getElementById('pendentes').classList = 'nav-link active'
+      document.getElementById('gastos').classList = 'nav-link '
+
+      document.getElementById('area').innerHTML = 
+      '{% if servicos2 != "" %}'+
+      '{% for servico in servicos2 %}'+
+              '<div class="col">'+
+                '<div class="card shadow-sm">'+
+                  '<div class="card-body">'+
+                    '<h6 class="card-text" id="serviceTxt">'+
+                      '{{servico.servico}}'+
+                    '</h6>'+
+                    '<p class="card-text" id="serviceTxt">'+
+                      '{{servico.detalhe}}'+
+                '</p> '+
+                '<div class="d-flex justify-content-between align-items-center">'+
+                  '<div class="btn-group">'+
+                      '<a href="{{ url("servico/"~servico.id_orcamento~"-"~servico.id_funcionario) }}" class="btn btn-sm btn-outline-secondary">Ver</a>'+
+                  '</div>'+
+                  
+                  '<small class="text-muted">{{ contarTempo(servico.data) }}</small>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+          '{% endfor %}'+
+          '{% else %}'+
+          '<p>Nenhum serviço pendente</p>'+
+          '{% endif %}'
+    }
+
+    function gastos(){
+      document.getElementById('finalizados').classList = 'nav-link'
+      document.getElementById('pendentes').classList = 'nav-link'
+      document.getElementById('gastos').classList = 'nav-link active'
+      document.getElementById('area').innerHTML = 
+      '{% for gasto in gastos %}'+
+      '<div class="d-flex text-muted pt-3">'+
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cash-coin bd-placeholder-img flex-shrink-0 me-2 rounded" viewBox="0 0 16 16">'+
+          '<path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>'+
+          '<path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>'+
+          '<path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>'+
+          '<path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>'+
+        '</svg>'+
+
+        '<div class="pb-3 mb-0 small lh-sm border-bottom w-100">'+
+          '<div class="d-flex justify-content-between">'+
+            '<strong class="text-gray-dark">{{ gasto.nome_material }}</strong>'+
+            '<a href="{{ url("gasto/"~gasto.id) }}">Detalhes</a>'+
+          '</div>'+
+          '<span class="d-block" style="color: rgb(173, 4, 4);">- R$ {{ gasto.gasto }}</span>'+
+          '<span class="d-block">{{ gasto.dateR }}'+
+            '<a href="{{ url("delete/gasto/"~gasto.id) }}" id="deleteGasto" class="text-decoration-none">'+
+            'Deletar gasto'+
+        '</a>'+
+        '</span>'+
+          
+          '</div>'+
+      '</div>'+
+
+      '{% endfor %}'
+    }
+
+      let total = 0;
+      '{% for gasto in gastos %}'
+      total += Number('{{ gasto.gasto }}'.replace('.', '').replace(',', '.'))
+      '{% endfor %}'
+      document.getElementById('Tgasto').innerHTML += total.toLocaleString('pt-br', {minimumFractionDigits: 2})
+
+      let btnverPass = document.getElementById('verPass')
+      let passProfile = document.getElementById('passProfile')
+
+      btnverPass.addEventListener('click', () => {
+        if(passProfile.type == 'password'){
+          passProfile.type = 'text'
+        }else{
+          passProfile.type = 'password'
+        }
+      })
+  </script>
+
+  {% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'body.html' %}
+
+{% block body %}
+
+<script>
+  let TGF = 0;
+</script>
+
+<div class="container-fluid">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h4">Lucros em mêses</h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a href="{{ url('gastofixo/novo') }}" type="button" class="btn btn-sm btn-outline-danger">+ Gasto fixo</a>
+      </div>
+    </div>
+  </div>
+
+    <select name="mes" id="mes" class="form-select">
+      <option value="0">Janeiro</option>
+      <option value="1">Fevereiro</option>
+      <option value="2">Março</option>
+      <option value="3">Abril</option>
+      <option value="4">Maio</option>
+      <option value="5">Junho</option>
+      <option value="6">Julho</option>
+      <option value="7">Agosto</option>
+      <option value="8">Setembro</option>
+      <option value="9">Outubro</option>
+      <option value="10">Novembro</option>
+      <option value="11">Dezembro</option>
+    </select>
+    <br>
+    <button class="btn btn-outline-primary" id="consultar">Consultar</button>
+
+<div class="modal modal-alert position-static d-block py-5" tabindex="-1" role="dialog" id="modalChoice" >
+  <div class="modal-dialog" id="modal" role="document" hidden>
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-body p-4 text-center">
+        <h4 class="fw-bold mb-3">Lucro no mês de <span id="mesSpan"></span></h4>
+        <h5 class="fw-bold mb-3 text-muted">Lucro Real: <span id="LR" style="color: green;"> </span></h5>
+        <h6 class="fw-bold mb-3 text-muted">Faturamento: <span id="faturamento" style="color: rgb(15, 207, 15);"> </span></h6>
+        <br>
+        {% for gastosFixo in gastosFixos %}
+        <div id="gastoFixo{{ gastosFixo.id }}">
+          <label for="aluguel" class="form-control">{{ gastosFixo.nome }}</label>
+          <a href="{{ url('gastoFixo/deletar/'~gastosFixo.id) }}" style="color: rgba(255, 0, 0, 0.593);">deletar</a>
+          <div class="input-group mb-3">
+            <span class="input-group-text bg-success text-light">R$</span>
+            <input type="text" class="form-control " value="{{ gastosFixo.valor }}"disabled>
+          </div>
+        </div>
+        <!-- Modal -->
+<div class="modal fade" id="exampleModal{{ material.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Tem certeza que deseja retirar o material do estoque?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <br>
+
+        <select class="form-select form-select-lg mb-3" name="funcionario" id="funcionario{{ material.id }}" aria-label=".form-select-lg example">
+          <option selected>Qual o funcionario que consumiu o material?</option>
+    
+        </select>
+
+        <form action="{{ url('estoque/retirar/') }}" method="post">
+        
+        <select class="form-select form-select-lg mb-3" name="service" id="service{{ material.id }}" aria-label=".form-select-lg example" hidden>
+          <option selected>Em qual serviço foi o consumo?</option>
+          
+        </select>
+        <br>
+
+        <h1 class="h5" style="padding-left: 1rem; color: rgba(0, 0, 0, 0.686);">Qual o nome do material?</h1>
+        <input type="text" name="nome_material" id="nome_material" class="form-control" placeholder="Exemplo: Tinta preto fosco 300ml" value="{{ material.nome_material }}">
+
+        <input type="text" name="material" value="{{ material.id }}" hidden>
+        <input type="text" name="gasto" value="{{ material.valor }}" hidden>
+
+        <br>
+      </div>
+        <div class="modal-footer">
+          
+          <div style="cursor: pointer;" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</div>
+          <button type="submit" class="btn btn-danger">Retirar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+        <script>
+          TGF += Number("{{ gastosFixo.valor }}".replace('.', '').replace(',', '.'))
+        </script>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+
+  let mesNew = new Date().getMonth()
+  let mesSelect = document.getElementById('mes').value = mesNew
+  
+  $(document).ready(function (){
+      $('#consultar').on('click', function (){
+            var mesSelecionado = document.getElementById('mes').value
+              $.ajax({
+                  url: "{{ url('lucrosM/consultar') }}",
+                  method: 'POST',
+                  data: {
+                    'mes': document.getElementById('mes').value
+                  },
+                  success: function (data) {
+                    let dados = JSON.parse(data)
+                    let lucroLiquido = 0
+                    for(let i = 0; i < dados.length; i++){
+                      lucroLiquido += Number((dados[i].lucro).replace('.', '').replace(',', '.'))
+                    }
+                    let lucroReal = lucroLiquido - TGF
+
+                    if(lucroLiquido < TGF){
+                      document.getElementById('LR').style.color = 'red'
+                    }else{
+                      document.getElementById('LR').style.color = 'green'
+                    }
+
+                    document.getElementById('faturamento').innerHTML = 'R$ '+lucroLiquido.toLocaleString('pt-br', {minimumFractionDigits: 2})
+                    document.getElementById('LR').innerHTML = 'R$ '+lucroReal.toLocaleString('pt-br', {minimumFractionDigits: 2})
+
+                    document.getElementById('modal').hidden = false
+                    document.getElementById('mesSpan').innerHTML = mesSelected(mesSelecionado)
+                  }
+              })
+      })
+
+    })
+
+    function mesSelected(mesSelecionado){
+      mesEscolhido = ''
+                    switch (mesSelecionado) {
+                      case '0':
+                      mesEscolhido = 'Janeiro'
+                        break;
+                        case '1':
+                      mesEscolhido = 'Fevereiro'
+                        break;
+                        case '2':
+                      mesEscolhido = 'Março'
+                        break;
+                        case '3':
+                      mesEscolhido = 'Abril'
+                        break;
+                        case '4':
+                      mesEscolhido = 'Maio'
+                        break;
+                        case '5':
+                      mesEscolhido = 'Junho'
+                        break;
+                        case '6':
+                      mesEscolhido = 'Julho'
+                        break;
+                        case '7':
+                      mesEscolhido = 'Agosto'
+                        break;
+                        case '8':
+                      mesEscolhido = 'Setembro'
+                        break;
+                        case '9':
+                      mesEscolhido = 'Outubro'
+                        break;
+                        case '10':
+                      mesEscolhido = 'Novembro'
+                        break;
+                        case '11':
+                      mesEscolhido = 'Dezembro'
+                        break;
+                      default:
+                        break;
+                    }
+              
+                    return mesEscolhido;
+    }
+</script>
+  {% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    a{
+      text-decoration: none;
+    }
+  </style>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Recibos</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a href="{{ url('recibo/criar') }}" type="button" class="btn btn-sm btn-outline-secondary">+ Criar</a>
+      </div>
+
+      <form data-url-busca="{{ url('buscar/recibo') }}" class="d-flex" role="search">
+        <div class="input-group mb-0">
+          <input type="text" id="busca" name="busca" class="form-control" type="search" placeholder="Search" aria-label="Search">
+        </div>
+      </form>
+      
+
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Valor(R$)</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Serviço</th>
+          <th scope="col">Data</th>
+        </tr>
+      </thead>
+      <tbody id="buscaResult">
+          {% for recibo in recibos %}
+          <tr>
+            <td>
+              <a href="{{ url('recibo/'~recibo.id) }}">
+                👁
+              </a>
+            </td>
+            <td>{{ recibo.valor }}</td>
+            <td>{{ recibo.cliente }}</td>
+            <td>{{ recibo.servico }}</td>
+            <td>{{ recibo.data }}</td>
+          </tr>
+        {% endfor %}
+
+
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+     $(document).ready(function (){
+      $('#busca').keyup(function (){
+          var busca = $(this).val();
+          console.log(busca)
+          if(busca.length > 0){
+              $.ajax({
+                  url: $('form').attr('data-url-busca'),
+                  method: 'POST',
+                  data: {
+                      busca: busca   
+                  },
+                  success: function (data) {
+                    var dataLimp = data.replace(/[']/g, '"')
+                    $('#buscaResult').html(dataLimp)
+                  }
+              })
+          }
+      })
+    })
+  </script>
+
+
+{% endblock %}

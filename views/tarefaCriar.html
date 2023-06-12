@@ -1,0 +1,70 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+<div class="modal modal-alert position-static d-block py-5" tabindex="-1" role="dialog" id="modalChoice">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-3 shadow">
+        <form action="{{ url('create/tarefa') }}">
+        <div class="modal-body p-4 text-center">
+          <h2 class="fw-bold mb-3">Nova tarefa</h2>
+          <h6>Qual o veículo que será realizado o serviço? </h6>
+
+                <div>
+                    <select class="form-select form-select-lg mb-3 my-5" aria-label=".form-select-lg example" name="veiculos" id="veiculos">
+                        {% for orcamento in orcamentos %}
+                        <option value="{{ orcamento.id }}">{{ orcamento.veiculo }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+           <br>
+          <h6>Quem será responsavel pela tarefa? </h6>
+
+                <div>
+                    <select class="form-select form-select-lg mb-3 my-5" aria-label=".form-select-lg example" name="funcionarios" id="funcionarios">
+                        {% for funcionario in funcionarios %}
+                        <option value="{{ funcionario.id }}">{{ funcionario.primeiro_nome }} {{ funcionario.segundo_nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <br>
+                <h6>Qual o tipo de serviço? </h6>
+      
+                      <div>
+                          <select class="form-select form-select-lg mb-3 my-5" aria-label=".form-select-lg example" name="servico" id="servico">
+                              <option value="Lixamento">Lixamento</option>
+                              <option value="Lataria">Lataria</option>
+                              <option value="Preparamento">Preparamento</option>
+                              <option value="Desmontagem">Desmontagem</option>
+                              <option value="Montagem">Montagem</option>
+                              <option value="Pintura">Pintura</option>
+                              <option value="Fundo">Fundo</option>
+                              <option value="Polimento">Polimento</option>
+                              <option value="Isolamento">Isolamento</option>
+                              <option value="Lavagem">Lavagem</option>
+                          </select>
+                      </div>
+
+                      <br>
+                <h6>Detalhe da tarefa</h6>
+                <div>
+                      <input type="text" name="detalhe" id="detalhe" class="form-control" placeholder="Descreva a ação da tarefa">
+                </div>
+        </div>
+        <div class="modal-footer flex-nowrap p-0">
+            <button class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0">
+                Criar
+              </button>
+
+          
+          <a href="{{ url('servicos/funcionarios') }}" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0">
+            Cancelar
+          </a>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

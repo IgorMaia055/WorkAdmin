@@ -1,0 +1,117 @@
+{% extends 'body.html' %}
+
+{% block body %}
+<style>
+    .imgAddImage{
+  width: 16.5rem;
+  text-align: end;
+  cursor: pointer;
+}
+.img_loja{
+  border: 1px solid rgba(0, 0, 0, .25);
+    margin-left: auto;
+    margin-right: auto;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 10.5rem;
+}
+.form-upload {
+    background: rgba(0, 0, 0, 0);
+    display: block;
+    margin: 0 auto;
+    border-style: dotted;
+    padding: 20px;
+    text-align: center;
+    line-height: 15rem;
+    width: 100%;
+    height: 20rem;
+}
+.botao-selecionar{
+  font-size: 1.2rem;
+}
+.imagem {
+  border: 1px solid rgba(0, 0, 0, .25);
+    margin-left: auto;
+    margin-right: auto;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 10.5rem;
+}
+.area_img{
+  background: white;
+  width: 100%;
+  height: 100%;
+  top: 10rem;
+  left: 0;
+  text-align: center;
+  position: absolute;
+}
+.input-file {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+</style>
+
+<form action="{{ url('save/comprovante') }}" method="post" class="form-upload">
+    <label class="input-personalizado">
+      <span class="botao-selecionar">Arraste uma imagem aqui ou click</span>
+      <input type="file" class="input-file" accept="image/*">
+    </label>
+    <div class="area_img" hidden="">
+      <img src="" class="imagem">
+    </div>
+    <input type="text" name="base64" id="img" hidden>
+
+    <select class="form-select form-select-lg mb-3 my-5" aria-label=".form-select-lg example" name="orcamento" id="orcamento">
+        <option selected>Orçamento relacionado ao comprovante</option>
+        <option value="1">Reforma</option>
+        <option value="2">Estética</option>
+        <option value="3">Restauração</option>
+        <option value="4">Ajustes</option>
+        <option value="5">Procedimento Inteiro</option>
+        <option value="6">Procedimento Razoável</option>
+
+      </select>
+
+    <button class="btn btn-secondary">Criar comprovante</button>
+    
+</form>
+<p id="imgArquivo" style="color: red;" hidden>Arquivo não permitido, Tente novamente com outro arquivo</p>
+
+<script>
+    const imgMeme = document.querySelector('.imagem');
+    const memeInput = document.querySelector('.input-file');
+    
+    memeInput.addEventListener('change', function(evt) {
+    
+      if (!(evt.target && evt.target.files && evt.target.files.length > 0)) {
+        return;
+      }
+      // Inicia o file-reader:
+      var r = new FileReader();
+      // Define o que ocorre quando concluir:
+      r.onload = function() {
+        let ty = evt.target.files[0].type
+        if(ty != 'image/jpeg' && ty != 'image/png' && ty != 'image/jpg' && ty != 'image/pdf'){
+          document.querySelector('#imgArquivo').hidden = false
+        }else{
+          // Define o `src` do elemento para o resultado:
+          imgMeme.src = r.result;
+          document.querySelector('#img').value = r.result
+          console.log(r.result)
+          document.querySelector('.area_img').hidden = false
+        }
+      }
+      // Lê o arquivo e cria um link (o resultado vai ser enviado para o onload.
+      r.readAsDataURL(evt.target.files[0]);
+    });
+            
+          </script>
+    
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'body.html' %}
+
+{% block body %}
+    
+    <div class="py-5 text-center">
+      <h2 id="title">Novo Material</h2>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-12">
+        <h4 class="mb-3" id="infor">Cadastro de material para o estoque</h4>
+        <form class="needs-validation" id="form" method="post" action="{{ url('cadastroMaterial/') }}">
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="firstName" class="form-label">Nome</label>
+              <input type="text" class="form-control" name="nome" id="nome" placeholder="" value="" required="">
+              <div class="invalid-feedback">
+                É necessario o nome.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="lastName" class="form-label">Loja fornecedora</label>
+              <input type="text" class="form-control" name="loja" id="loja" placeholder="" value="" required="">
+              <div class="invalid-feedback">
+                Informação necessária.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="apelido" class="form-label">Valor</label>
+                <input type="text" class="form-control" name="valorMaterial" id="valorReal" >
+            </div>
+          </div>
+          <br><br>
+
+
+          <button class="w-100 btn btn-primary btn-lg" id="cadastro" type="submit" >Adicionar material</button>
+
+        </form>
+        <br><br><br>
+      </div>
+    </div>
+
+  {% endblock %}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Pintura Maia</title>
+    <link rel="shortcut icon" href="../site/img/logo 2(auto pintura maia).jpg" type="image/x-icon">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src=
+"https://html2canvas.hertzen.com/dist/html2canvas.min.js">
+    </script>
+
+
+    <link rel="stylesheet" href="../site/css/dashboard.css">
+  <style type="text/css">/* Chart.js */
+@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style>
+<style>
+  .img{
+    height: 2.5rem;
+    width: 8rem;
+    
+  }
+  .spanDash{
+    color: green;
+    font-size: 1.5rem;
+    padding-left: 30%;
+  }
+  .normal{
+    color: rgb(101, 99, 99);
+  }
+  .image{
+    height: 100%;
+  }
+  .lucro{
+    color: green;
+  }
+  .infos{
+    text-align: end;
+  }
+  .navigator{
+    width: 100vh;
+  }
+  .navigator span{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #navegacao{
+    
+    border-radius: 20px;
+    border: 1px solid rgb(175, 144, 205);
+  }
+  .bg-darkMax{
+    background-color: black;
+  }
+  .bg-darkMin{
+    background-color:rgb(28, 28, 28);
+  }
+</style>
+</head>
+  <body>
+  <style>
+    .icon{
+        position: relative;
+        text-align: center;
+        height: 10rem;
+    }
+    #inputTimerVal{
+        position: absolute;
+        top: 2.5rem;
+        left: 38.4rem;
+        border-radius: 100%;
+        height: 5rem;
+        width: 6rem;
+        line-height: 5rem;
+        background-color: rgb(255, 255, 255);
+        font-size: 1.5rem;
+        border: 0;
+    }
+    .interacoes{
+        width: 20%;
+        text-align: center;
+    }
+  </style>
+  
+<div class="container-fluid">
+    <div class="row">
+
+        <main class="col-md-9 ms-sm-auto col-lg-12 px-md-4">
+      
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h5">Tempo de execução do serviço para o veículo <strong>{{ veiculo }}</strong> </h1>
+            
+                <h5 class="h6" id="info">Tempo aproximado de execução do serviço: {{ timer }}</h5>
+            
+              </div>
+            
+              <div class="row g-3 ">
+            
+                <div class="my-2 col-12">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-stopwatch" viewBox="0 0 16 16">
+                            <path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5V5.6z"/>
+                            <path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 0 1 .012-.013l.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354a.512.512 0 0 1-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3z"/>
+                          </svg>
+                          <div id="timer">
+                            <input type="text" name="inputTimerVal" onkeyup="val()" id="inputTimerVal" value="{{ timer }}">
+                          </div>
+                    </div>
+            
+                    <div style="padding-left: 45.5%;">
+                        <div class="interacoes row">
+                            <div class="btn btn-outline-success col-12" id="btnStart" onclick="start()">start</div>
+                          
+                            <form data-url-post-time="{{ url('timer/save') }}" class="col-4">
+                              
+                              <input type="text" id="inputTime" value="{{ timer }}" name="timer" hidden>
+                              <input type="text" id="id_orcamento" value="{{ id }}" name="id_orcamento" hidden>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          
+        </main>
+
+  </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+
+  <script>
+
+    function val(){
+      document.getElementById('inputTime').value = document.getElementById('inputTimerVal').value
+      ajaxUpdate()
+    }
+
+    let timer = '{{ timer }}'.split(':')
+
+    let tempo = {
+        'segundos': timer[2],
+        'minutos': timer[1],
+        'horas': timer[0]
+    }
+
+        let interval;
+
+        function start(){
+            $btnStart = $('#btnStart')
+            $btnStart.html('pause')
+            $btnStart.attr("onclick", "pause()")
+
+            interval = setInterval(() => {
+                tempo.segundos ++
+                if(tempo.segundos === 60){
+                    tempo.segundos = 00
+                    tempo.minutos ++
+                    if(tempo.minutos === 60){
+                        tempo.minutos = 00
+                        tempo.horas ++
+                    }
+                }
+                let element = String(tempo.horas + ':' + tempo.minutos + ':' + tempo.segundos)
+               document.getElementById('inputTimerVal').value = element
+               document.getElementById('inputTime').value = document.getElementById('inputTimerVal').value
+               ajaxUpdate()
+
+            }, 1000);
+        }
+        function pause(){
+            $btnStart = $('#btnStart')
+            $btnStart.html('start')
+            $btnStart.attr("onclick", "start()")
+
+           clearInterval(interval)
+        }
+
+        function ajaxUpdate(){
+          $(document).ready(function (){
+                 var val = $("#inputTime").val();
+                 var id = $("#id_orcamento").val();
+
+                  $.ajax({
+                     url: $('form').attr('data-url-post-time'),
+                     method: 'POST',
+                     data: {
+                      'time': val,
+                      'id': id
+                     },
+                     success: function (data) {
+                     }
+                  })
+                })
+        }
+
+  </script>
+
+  
+</body></html>

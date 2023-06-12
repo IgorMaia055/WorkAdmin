@@ -1,0 +1,37 @@
+#image{
+    position: relative;
+    width: 32rem;
+    left: 25%;
+  }
+  #img{
+      height: 40rem;
+      width: 32rem;
+  }
+  .inputRecibo{
+      position: absolute;
+      border: 0;
+      background-color: rgba(165, 42, 42, 0);
+      font-size: 1.2rem;
+      font-weight: 500;
+  }
+  #cliente{
+      left: 20%;
+      top: 46.5%;
+      width: 24.5rem;
+  }
+  #valorText{
+      left: 29%;
+      top: 54.5%;
+      width: 21.5rem;
+      font-weight: 500;
+      font-size: 1rem;
+  }
+  
+  #valor{
+      left: 83%;
+      top: 32.5%;
+      font-weight: 500;
+      font-size: 1.1rem;
+      width: 5rem;
+      background-color: rgba(209, 28, 28, 0);
+  }

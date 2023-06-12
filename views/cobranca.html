@@ -1,0 +1,89 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    .states{
+      border: 0;
+      background-color: rgba(240, 248, 255, 0);
+    }
+    a{
+      text-decoration: none;
+    }
+  </style>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Cobranças</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a href="{{ url('cobranca/criar') }}" type="button" class="btn btn-sm btn-outline-secondary">+ Criar</a>
+      </div>
+
+      <form data-url-busca="{{ url('buscar/cobranca') }}" class="d-flex" role="search">
+        <div class="input-group mb-0">
+          <input type="text" id="busca" name="busca" class="form-control" type="search" placeholder="Search" aria-label="Search">
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Cobrança(R$)</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Endereço</th>
+          <th scope="col">Serviço</th>
+          <th scope="col">Total(R$)</th>
+        </tr>
+      </thead>
+      <tbody id="buscaResult">
+          {% for cobranca in cobrancas %}
+          <tr>
+            <td>
+              <a href="{{ url('cobranca/'~cobranca.id) }}">
+                👁
+              </a>
+            </td>
+            <td>{{ cobranca.valorCobranca }}</td>
+            <td>{{ cobranca.cliente }}</td>
+            <td>{{ cobranca.tel }}</td>
+            <td>{{ cobranca.endereco }}</td>
+            <td>{{ cobranca.servico }}</td>
+            <td>{{ cobranca.valor }}</td>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(function (){
+      $('#busca').keyup(function (){
+          var busca = $(this).val();
+          if(busca.length > 0){
+    
+              $.ajax({
+                  url: $('form').attr('data-url-busca'),
+                  method: 'POST',
+                  data: {
+                      busca: busca   
+                  },
+                  success: function (data) {
+                    var dataLimp = data.replace(/[']/g, '"')
+                    console.log(dataLimp)
+                    $('#buscaResult').html(dataLimp)
+                  }
+              })
+          }
+      })
+    })
+  </script>
+
+
+  {% endblock %}

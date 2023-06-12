@@ -1,0 +1,49 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    .states{
+      border: 0;
+      background-color: rgba(240, 248, 255, 0);
+    }
+    a{
+      text-decoration: none;
+    }
+  </style>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Ecolha qual o tipo de documento</h1>
+  </div>
+
+  <div class="card-group">
+    <div class="card">
+        <a href="{{ url('recibo/criar') }}">
+            <div class="card-body">
+              <h5 class="card-title">Recibo</h5>
+              <p class="card-text">Um documento que informa que o pagamento de um serviço foi realizado.</p>
+            </div>
+        </a>
+    </div>
+    <div class="card">
+        <a href="{{ url('orcamento/criar') }}">
+      <div class="card-body">
+        <h5 class="card-title">Orçamento</h5>
+        <p class="card-text">Um documento que descreve quais os serviços que serão prestados e seus valores.</p>
+      </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url('cobranca/criar') }}">
+    <div class="card-body">
+      <h5 class="card-title">Cobrança</h5>
+      <p class="card-text">Um documento que descreve a cobrança de algum valor relacionado ao um serviço.</p>
+    </div>
+    </a>
+  </div>
+    
+  </div>
+  </div>
+
+
+  {% endblock %}

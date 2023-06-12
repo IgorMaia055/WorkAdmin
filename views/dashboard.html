@@ -1,0 +1,95 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+  <style>
+    a{
+  text-decoration: none;
+}
+.carousel-indicators{
+  z-index: 100;
+  bottom: 29rem;
+  left: 40rem;
+}
+#btn{
+  background-color: rgb(0, 72, 255);
+  border-radius: 100%;
+  height: 1.2rem;
+  width: 1.2rem;
+}
+#aoMes{
+  color: rgb(97, 97, 97);
+  font-size: 1.2rem;
+}
+  </style>
+
+  <div class="chartjs-size-monitor">
+    <div class="chartjs-size-monitor-expand">
+      <div class=""></div>
+    </div>
+    <div class="chartjs-size-monitor-shrink">
+      <div class=""></div>
+    </div>
+  </div>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2" id="titulo">Dashboard</h1>
+
+  </div>
+
+        <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart2" width="596" height="251" style="display: block; width: 596px; height: 251px;"></canvas>
+
+        <h5 class="my-4">Total gerado: <strong id="totalAa">R$ </strong></h5>
+
+
+  <h2>Serviços com sucesso
+
+  </h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Valor(R$)</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Veiculo</th>
+          <th scope="col">Data</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for orcamento in orcamentos %}
+
+        <tr>
+          <td>{{ orcamento.total }}</td>
+          <td>{{ orcamento.cliente }}</td>
+          <td>{{ orcamento.tel }}</td>
+          <td>{{ orcamento.veiculo }}</td>
+          <td>{{ orcamento.dataR }}</td>
+          <td>
+            <a href="{{ url('orcamento/'~orcamento.id) }}">
+              👁
+            </a>
+          </td>
+        </tr>
+
+        {% endfor %}
+
+
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <footer class="py-3 my-4">
+      <p class="text-center text-muted">© {{ ano }} Auto Pintura Maia, Inc</p>
+    </footer>
+  </div>
+
+  <script>
+    function totalMEI(totalAa){
+      console.log(totalAa)
+    }
+  </script>
+
+  {% endblock %}

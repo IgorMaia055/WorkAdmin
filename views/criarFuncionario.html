@@ -1,0 +1,145 @@
+{% extends 'body.html' %}
+
+{% block body %}
+    
+    <div class="py-5 text-center">
+      <h2 id="title">Novato</h2>
+      <p class="lead">Esse cadastro serve para cadastrar informações de funcionario.</p>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-12">
+        <h4 class="mb-3" id="infor">Cadastro de funcionario</h4>
+        <form class="needs-validation" id="form" action="{{ url('novoFuncionario/') }}">
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="firstName" class="form-label">Primeiro nome</label>
+              <input type="text" class="form-control" name="primeiroNome" id="firstName" placeholder="" value="" required="">
+              <div class="invalid-feedback">
+                É necessario o primeiro nome.
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label for="lastName" class="form-label">Segundo nome</label>
+              <input type="text" class="form-control" name="segundoNome" id="lastName" placeholder="" value="" required="">
+              <div class="invalid-feedback">
+                É necessario o segundo nome.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="apelido" class="form-label">Apelido</label>
+                <input type="text" class="form-control" name="apelido" id="apelido">
+            </div>
+
+            <div class="col-12">
+              <label for="idade" class="form-label">Idade</label>
+                <input type="number" class="form-control" name="idade" id="idade">
+            </div>
+
+            <div class="col-12">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com">
+            </div>
+
+            <div class="col-12">
+              <label for="tel" class="form-label">Telefone</label>
+              <input type="text" class="form-control" name="tel" id="tel" value="(41) 9" placeholder="">
+            </div>
+
+            <div class="col-12">
+              <label for="address" class="form-label">Endereço</label>
+              <input type="text" class="form-control" name="endereco" id="endereco" placeholder="" required="">
+              <div class="invalid-feedback">
+                Um endereço é necessario.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="cep" class="form-label">CEP</label>
+              <input type="text" class="form-control" name="cep" id="cep" placeholder="" required="">
+              <div class="invalid-feedback">
+                CEP para uma melhor procura.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="funcao" class="form-label">Função do funcionario</label>
+              <select name="funcao" id="funcao" class="form-control">
+                <option value="Desmontador">Desmontador</option>
+                <option value="Latueiro">Latueiro</option>
+                <option value="Preparador">Preparador</option>
+                <option value="Pintor">Pintor</option>
+                <option value="Polidor">Polidor</option>
+                <option value="Lavador">Lavador</option>
+                <option value="Faxineiro">Faxineiro</option>
+                <option value="Alguma profissão">Outro</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label for="tempoTrabalho" class="form-label">Tempo de trabalho</label>
+              <select name="tempoTrabalho" id="tempoTrabalho" class="form-control">
+                <option value="tempointegral">Tempo integral</option>
+                <option value="meioperíodo">Meio período</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label for="salario" class="form-label">Sálario</label>
+              <input type="text" name="salario" id="salario" class="form-control">
+            </div>
+
+            <div class="col-12">
+              <label for="dataInicial" class="form-label">Data de inicialização</label>
+              <input type="date" class="form-control" name="dataInicial" id="dataInicial">
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+            <label for="senha" class="form-label">Senha do funcionario</label>
+            <input type="text" class="form-control" name="senha" id="senha">
+
+          <hr class="my-4">
+
+
+          <button class="w-100 btn btn-primary btn-lg" id="cadastro" type="submit" >Cadastrar funcionario</button>
+
+          <button class="w-100 btn btn-primary btn-lg" id="save" type="submit" hidden>Salvar</button>
+        </form>
+        <br><br><br>
+      </div>
+    </div>
+
+    <script>
+      '{% if dados != false %}'
+      document.getElementById('title').innerHTML = 'Editar funcionario'
+      document.querySelector('.lead').innerHTML = 'Edição do formulario de dados do funcionario'
+      document.getElementById('cadastro').hidden = true
+      document.getElementById('save').hidden = false
+      document.getElementById('infor').innerHTML = 'Edição do funcionario'
+      $('#form').attr('action', '{{ url("salvar/"~id) }}')
+
+      '{% for profile in funcionario %}'
+         document.getElementById('firstName').value = '{{ profile.primeiro_nome }}'
+         document.getElementById('lastName').value = '{{ profile.segundo_nome }}'
+         document.getElementById('apelido').value = '{{ profile.apelido }}'
+         document.getElementById('idade').value = '{{ profile.idade }}'
+         document.getElementById('email').value = '{{ profile.email }}'
+         document.getElementById('tel').value = '{{ profile.telefone }}'
+         document.getElementById('endereco').value = '{{ profile.endereco }}'
+         document.getElementById('cep').value = '{{ profile.cep }}'
+         $("#funcao").val('{{ profile.funcao }}').change()
+         $("#tempoTrabalho").val('{{ profile.tempotrabalho }}').change()
+         document.getElementById('salario').value = '{{ profile.salario }}'
+         document.getElementById('dataInicial').value = '{{ profile.data_trabalho }}'
+         document.getElementById('senha').value = '{{ profile.senha }}'
+
+         '{% endfor %}'
+      '{% endif %}'
+    </script>
+
+  {% endblock %}
